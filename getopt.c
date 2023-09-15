@@ -34,9 +34,9 @@
 
 const char* optarg = NULL;
 int optopt = 0;
-/* The variable optind [...] shall be initialized to 1 by the system. */
+/* The variable optind [...] shall be initialized to 1 by the system. The user can 'reset' optind by setting it to 1 or less. */
 int optind = 1;
-int opterr;
+int opterr = 1; /* The calling program may prevent the error message by setting opterr to 0. */
 
 static const char* optcursor = NULL;
 static const char *first = NULL;
@@ -65,6 +65,10 @@ int getopt(int argc, const char* const argv[], const char* optstring) {
   optarg = NULL;
   opterr = 0;
   optopt = 0;
+
+  /* Is `optind` reset by userland code? */
+  if (optind <= 1)
+      optind = 1;
 
   /* Unspecified, but we need it to avoid overrunning the argv bounds. */
   if (optind >= argc)
@@ -194,7 +198,12 @@ int getopt_long(int argc, const char* const argv[], const char* optstring,
   int retval = -1;
 
   optarg = NULL;
+  opterr = 0;
   optopt = 0;
+
+  /* Is `optind` reset by userland code? */
+  if (optind <= 1)
+      optind = 1;
 
   if (optind >= argc)
     return -1;
