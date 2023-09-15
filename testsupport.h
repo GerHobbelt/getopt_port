@@ -30,7 +30,7 @@
 #define INCLUDED_TESTSUPPORT_H
 
 template< int argc >
-static int count(char* (&argv)[argc]) {
+static int count(const char* (&argv)[argc]) {
   return argc;
 }
 

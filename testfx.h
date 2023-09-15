@@ -29,7 +29,10 @@
 #ifndef INCLUDED_TESTFX_H
 #define INCLUDED_TESTFX_H
 
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <iostream>
 #include <string>
 #include <stdexcept>

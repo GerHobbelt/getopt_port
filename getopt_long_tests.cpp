@@ -33,21 +33,21 @@
 option null_opt = {0};
 
 TEST_F(getopt_fixture, test_getopt_long_empty) {
-  char* argv[] = {"foo.exe"};
+  const char* argv[] = {"foo.exe"};
   option opts[] = {null_opt};
 
   assert_equal(-1, (char)getopt_long(count(argv), argv, "abc", opts, NULL));
 }
 
 TEST_F(getopt_fixture, test_getopt_long_only_nonoptions) {
-  char* argv[] = {"foo.exe", "nonoption"};
+  const char* argv[] = {"foo.exe", "nonoption"};
   option opts[] = {null_opt};
 
   assert_equal(-1, (char)getopt_long(count(argv), argv, "a", opts, NULL));
 }
 
 TEST_F(getopt_fixture, test_getopt_long_only_shortopts) {
-  char* argv[] = {"foo.exe", "-a", "-b"};
+  const char* argv[] = {"foo.exe", "-a", "-b"};
   option opts[] = {null_opt};
 
   assert_equal('a', (char)getopt_long(count(argv), argv, "ab", opts, NULL));
@@ -55,7 +55,7 @@ TEST_F(getopt_fixture, test_getopt_long_only_shortopts) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_one_longopt) {
-  char* argv[] = {"foo.exe", "--first", "-a"};
+  const char* argv[] = {"foo.exe", "--first", "-a"};
 
   option opts[] = {
     {"first", no_argument, NULL, 'f'},
@@ -67,7 +67,7 @@ TEST_F(getopt_fixture, test_getopt_long_one_longopt) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_two_longopts) {
-  char* argv[] = {"foo.exe", "--second", "--first"};
+  const char* argv[] = {"foo.exe", "--second", "--first"};
 
   option opts[] = {
     {"first", no_argument, NULL, 'f'},
@@ -80,7 +80,7 @@ TEST_F(getopt_fixture, test_getopt_long_two_longopts) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_abbreviated) {
-  char* argv[] = {"foo.exe", "--fir", "--fif"};
+  const char* argv[] = {"foo.exe", "--fir", "--fif"};
 
   option opts[] = {
     {"first", no_argument, NULL, '1'},
@@ -93,7 +93,7 @@ TEST_F(getopt_fixture, test_getopt_long_abbreviated) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_abbreviated_with_params) {
-  char* argv[] = {"foo.exe", "--fir=100", "--fif=500"};
+  const char* argv[] = {"foo.exe", "--fir=100", "--fif=500"};
 
   option opts[] = {
     {"first", required_argument, NULL, '1'},
@@ -109,7 +109,7 @@ TEST_F(getopt_fixture, test_getopt_long_abbreviated_with_params) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_ambiguous_abbrev) {
-  char* argv[] = {"foo.exe", "--fi", "--fi"};
+  const char* argv[] = {"foo.exe", "--fi", "--fi"};
 
   option opts[] = {
     {"first", no_argument, NULL, '1'},
@@ -124,7 +124,7 @@ TEST_F(getopt_fixture, test_getopt_long_ambiguous_abbrev) {
 TEST_F(getopt_fixture, test_getopt_long_ambiguous_exact_match) {
   // Derived from IWYU bug:
   // https://github.com/include-what-you-use/include-what-you-use/pull/1260
-  char* argv[] = {"foo.exe", "--error"};
+  const char* argv[] = {"foo.exe", "--error"};
 
   // If there are multiple options that match arguments by abbreviation, make
   // sure we accept and prefer exact matches.
@@ -139,7 +139,7 @@ TEST_F(getopt_fixture, test_getopt_long_ambiguous_exact_match) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_longindex) {
-  char* argv[] = {"foo.exe", "--second", "--first"};
+  const char* argv[] = {"foo.exe", "--second", "--first"};
 
   option opts[] = {
     {"first", no_argument, NULL, '1'},
@@ -156,7 +156,7 @@ TEST_F(getopt_fixture, test_getopt_long_longindex) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_flag) {
-  char* argv[] = {"foo.exe", "--second", "--first"};
+  const char* argv[] = {"foo.exe", "--second", "--first"};
 
   int flag = 0;
 
@@ -173,7 +173,7 @@ TEST_F(getopt_fixture, test_getopt_long_flag) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_unknown) {
-  char* argv[] = {"foo.exe", "--unknown"};
+  const char* argv[] = {"foo.exe", "--unknown"};
 
   option opts[] = {
     {"first", no_argument, NULL, '1'},
@@ -186,7 +186,7 @@ TEST_F(getopt_fixture, test_getopt_long_unknown) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
-  char* argv[] = {"foo.exe", "--arg=value"};
+  const char* argv[] = {"foo.exe", "--arg=value"};
 
   option opts[] = {
     {"arg", required_argument, NULL, 'a'},
@@ -198,7 +198,7 @@ TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_required_argument_separate_argv) {
-  char* argv[] = {"foo.exe", "--arg", "value"};
+  const char* argv[] = {"foo.exe", "--arg", "value"};
 
   option opts[] = {
     {"arg", required_argument, NULL, 'a'},
@@ -210,7 +210,7 @@ TEST_F(getopt_fixture, test_getopt_long_required_argument_separate_argv) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_missing_required_argument) {
-  char* argv[] = {"foo.exe", "--arg"};
+  const char* argv[] = {"foo.exe", "--arg"};
 
   option opts[] = {
     {"arg", required_argument, NULL, 'a'},
@@ -229,13 +229,13 @@ TEST_F(getopt_fixture, test_getopt_long_extraneous_argument) {
     null_opt
   };
 
-  char* argv[] = {"foo.exe", "--arg=bar"};
+  const char* argv[] = {"foo.exe", "--arg=bar"};
   assert_equal('?', getopt_long(count(argv), argv, "a", opts, NULL));
   assert_equal((char*)NULL, optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
-  char* argv[] = {"foo.exe", "--arg="};
+  const char* argv[] = {"foo.exe", "--arg="};
 
   option opts[] = {
     {"arg", required_argument, NULL, 'a'},
@@ -247,7 +247,7 @@ TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
-  char* argv[] = {"foo.exe", "--arg=value"};
+  const char* argv[] = {"foo.exe", "--arg=value"};
 
   option opts[] = {
     {"arg", optional_argument, NULL, 'a'},
@@ -259,7 +259,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_separate_argv) {
-  char* argv[] = {"foo.exe", "--arg", "value"};
+  const char* argv[] = {"foo.exe", "--arg", "value"};
 
   option opts[] = {
     {"arg", optional_argument, NULL, 'a'},
@@ -271,7 +271,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_separate_argv) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
-  char* argv[] = {"foo.exe", "--arg"};
+  const char* argv[] = {"foo.exe", "--arg"};
 
   option opts[] = {
     {"arg", optional_argument, NULL, 'a'},
@@ -284,7 +284,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
-  char* argv[] = {"foo.exe", "--arg="};
+  const char* argv[] = {"foo.exe", "--arg="};
 
   option opts[] = {
     {"arg", optional_argument, NULL, 'a'},
@@ -299,7 +299,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument_more_args) {
   // Intended to cover https://github.com/kimgr/getopt_port/issues/5.
   // Does not appear to provoke any strange behavior, so I might be missing
   // something.
-  char* argv[] = {"foo.exe", "--optional", "--required", "val"};
+  const char* argv[] = {"foo.exe", "--optional", "--required", "val"};
 
   option opts[] = {
     {"optional", optional_argument, NULL, 'o'},
@@ -316,7 +316,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument_more_args) {
 
 TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   // First use getopt() to put something into optarg.
-  char* argv[] = {"foo.exe", "-avalue"};
+  const char* argv[] = {"foo.exe", "-avalue"};
   assert_equal('a', getopt(count(argv), argv, "a:"));
   assert_equal("value", optarg);
 
@@ -329,14 +329,14 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
     null_opt
   };
 
-  char* long_argv[] = {"foo.exe", "this"};
+  const char* long_argv[] = {"foo.exe", "this"};
   assert_equal(-1, getopt_long(count(long_argv), long_argv, "a::", opts, NULL));
   assert_equal((char*)NULL, optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_resets_optopt) {
   // First use getopt() to put something into optopt.
-  char* argv[] = {"foo.exe", "-z"};
+  const char* argv[] = {"foo.exe", "-z"};
   assert_equal('?', getopt(count(argv), argv, "a"));
   assert_equal('z', optopt);
 
@@ -349,7 +349,7 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optopt) {
     null_opt
   };
 
-  char* long_argv[] = {"foo.exe", "--zarg"};
+  const char* long_argv[] = {"foo.exe", "--zarg"};
   assert_equal('?', getopt_long(count(long_argv), long_argv, "a", opts, NULL));
   assert_equal(0, optopt);
 }

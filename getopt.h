@@ -37,7 +37,7 @@ extern "C" {
 #define required_argument 2
 #define optional_argument 3
 
-extern char* optarg;
+extern const char* optarg;
 extern int optind, opterr, optopt;
 
 struct option {
@@ -47,9 +47,9 @@ struct option {
   int val;
 };
 
-int getopt(int argc, char* const argv[], const char* optstring);
+int getopt(int argc, const char* const argv[], const char* optstring);
 
-int getopt_long(int argc, char* const argv[],
+int getopt_long(int argc, const char* const argv[],
   const char* optstring, const struct option* longopts, int* longindex);
 
 #if defined(__cplusplus)
