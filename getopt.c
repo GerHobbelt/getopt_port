@@ -156,7 +156,8 @@ int getopt(int argc, const char* const argv[], const char* optstring) {
                was a colon, or a question-mark character ( '?' ) otherwise.
             */
             optarg = NULL;
-            fprintf(stderr, "%s: option requires an argument -- '%c'\n", argv[0], optchar);
+            if (opterr)
+              fprintf(stderr, "%s: option requires an argument -- '%c'\n", argv[0], optchar);
             optchar = (optstring[0] == ':') ? ':' : '?';
           }
         } else {
@@ -166,7 +167,8 @@ int getopt(int argc, const char* const argv[], const char* optstring) {
       optcursor = NULL;
     }
   } else {
-    fprintf(stderr,"%s: invalid option -- '%c'\n", argv[0], optchar);
+    if (opterr)
+      fprintf(stderr,"%s: invalid option -- '%c'\n", argv[0], optchar);
     /* If getopt() encounters an option character that is not contained in
        optstring, it shall return the question-mark ( '?' ) character. */
     optchar = '?';
@@ -299,9 +301,11 @@ int getopt_long(int argc, const char* const argv[], const char* optstring,
     /* Unknown option or ambiguous match. */
     retval = '?';
     if (num_matches == 0) {
-      fprintf(stderr, "%s: unrecognized option -- '%s'\n", argv[0], argv[optind]);
+      if (opterr)
+        fprintf(stderr, "%s: unrecognized option -- '%s'\n", argv[0], argv[optind]);
     } else {
-      fprintf(stderr, "%s: option '%s' is ambiguous\n", argv[0], argv[optind]);
+      if (opterr)
+        fprintf(stderr, "%s: option '%s' is ambiguous\n", argv[0], argv[optind]);
     }
   }
 
