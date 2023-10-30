@@ -39,7 +39,11 @@ struct option opts[] = {
   {0, 0, 0, 0}
 };
 
-int main(int argc, char* argv[]) {
+#if defined(BUILD_MONOLITHIC)
+#define main getopt_test_main
+#endif
+
+int main(int argc, const char** argv) {
   int opt;
 
   while ((opt = getopt_long(argc, argv, "fs:t::", opts, NULL)) != -1) {
