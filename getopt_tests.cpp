@@ -72,8 +72,32 @@ TEST_F(getopt_fixture, test_getopt_embedded_nonoptions) {
   const char* argv[] = {"foo.exe", "-a", "nonoption1", "nonoption2", "-b"};
   assert_equal('a', getopt(count(argv), argv, "ab"));
 
-  // The non-option argument "nonoption1" terminates the scan
-  assert_equal(-1, getopt(count(argv), argv, "ab"));
+  // The non-option argument "nonoption1" DOES NOT terminate the scan: 
+  // we follow GNU getopt behaviour where the argv elements get reshuffled
+  // as a side-effect.
+  assert_equal('b', getopt(count(argv), argv, "ab"));
+  assert_equal('b', optopt);
+  assert_equal((char*)NULL, optarg);
+  assert_equal("-b", argv[2]);
+  assert_equal("nonoption1", argv[3]);
+  assert_equal("nonoption2", argv[4]);
+}
+
+TEST_F(getopt_fixture, test_getopt_stop_scan_on_double_dash) {
+	const char* argv[] = {"foo.exe", "-a", "nonoption1", "--", "nonoption2", "-b"};
+	assert_equal('a', getopt(count(argv), argv, "ab"));
+
+	// The non-option argument "--" terminates the scan.
+	// we follow GNU getopt behaviour where the argv elements get reshuffled
+	// as a side-effect.
+	assert_equal(-1, getopt(count(argv), argv, "ab"));
+	assert_equal(0, optopt);
+	assert_equal((char*)NULL, optarg);
+	assert_equal(optind, 3);
+	assert_equal("--", argv[2]);
+	assert_equal("nonoption1", argv[3]);
+	assert_equal("nonoption2", argv[4]);
+	assert_equal("-b", argv[5]);
 }
 
 TEST_F(getopt_fixture, test_getopt_argument_same_argv) {
