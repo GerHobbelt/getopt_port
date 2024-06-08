@@ -47,9 +47,9 @@ struct option {
   int val;
 };
 
-int getopt(int argc, const char* const * argv, const char* optstring);
+int getopt(int argc, const char** argv, const char* optstring);
 
-int getopt_long(int argc, const char* const * argv,
+int getopt_long(int argc, const char** argv,
   const char* optstring, const struct option* longopts, int* longindex);
 
 #if defined(__cplusplus)

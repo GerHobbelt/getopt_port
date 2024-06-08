@@ -58,7 +58,7 @@ static void rotate(const char **argv, int argc) {
 [2] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
 [3] http://www.freebsd.org/cgi/man.cgi?query=getopt&sektion=3&manpath=FreeBSD+9.0-RELEASE
 */
-int getopt(int argc, const char* const * argv, const char* optstring) {
+int getopt(int argc, const char** argv, const char* optstring) {
   int optchar = -1;
   const char* optdecl = NULL;
 
@@ -89,7 +89,7 @@ int getopt(int argc, const char* const * argv, const char* optstring) {
       first = argv[optind];
 
     do {
-      rotate((const char **)(argv + optind), argc - optind);
+      rotate(argv + optind, argc - optind);
     } while (*argv[optind] != '-' && argv[optind] != first);
 
     if (argv[optind] == first)
@@ -107,7 +107,7 @@ int getopt(int argc, const char* const * argv, const char* optstring) {
     ++optind;
     if (first) {
       do {
-        rotate((const char **)(argv + optind), argc - optind);
+        rotate(argv + optind, argc - optind);
       } while (argv[optind] != first);
     }
     goto no_more_optchars;
@@ -189,7 +189,7 @@ no_more_optchars:
 
 [1] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
 */
-int getopt_long(int argc, const char* const * argv, const char* optstring,
+int getopt_long(int argc, const char** argv, const char* optstring,
   const struct option* longopts, int* longindex) {
   const struct option* o = longopts;
   const struct option* match = NULL;
@@ -225,7 +225,7 @@ int getopt_long(int argc, const char* const * argv, const char* optstring,
       first = argv[optind];
 
     do {
-      rotate((char **)(argv + optind), argc - optind);
+      rotate(argv + optind, argc - optind);
     } while (*argv[optind] != '-' && argv[optind] != first);
 
     if (argv[optind] == first)
