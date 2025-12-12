@@ -50,6 +50,25 @@ static void rotate(const char **argv, int argc) {
   argv[argc - 1] = tmp;
 }
 
+static const char *
+post_strrpbrk(const char* s, const char* charset)
+{
+	if (!s)
+		return "???";
+	const char* p;
+	while ((p = strpbrk(s, charset)) != NULL) {
+		s = p;
+		s++;
+	}
+	return s;
+}
+
+static
+const char* optbinname(const char* argv0)
+{
+	return post_strrpbrk(argv0, ":/\\");	// skip past all UNIX, DOS, Windows, VMS path separators to get the *name* of the binary.
+}
+
 /* Implemented based on [1] and [2] for optional arguments.
    optopt is handled FreeBSD-style, per [3].
    Other GNU and FreeBSD extensions are purely accidental.
@@ -157,7 +176,7 @@ int getopt(int argc, const char** argv, const char* optstring) {
             */
             optarg = NULL;
             if (opterr)
-              fprintf(stderr, "%s: option requires an argument -- '%c'\n", argv[0], optchar);
+              fprintf(stderr, "%s: option requires an argument -- '%c'\n", optbinname(argv[0]), optchar);
             optchar = (optstring[0] == ':') ? ':' : '?';
           }
         } else {
@@ -168,7 +187,7 @@ int getopt(int argc, const char** argv, const char* optstring) {
     }
   } else {
     if (opterr)
-      fprintf(stderr,"%s: invalid option -- '%c'\n", argv[0], optchar);
+      fprintf(stderr,"%s: invalid option -- '%c'\n", optbinname(argv[0]), optchar);
     /* If getopt() encounters an option character that is not contained in
        optstring, it shall return the question-mark ( '?' ) character. */
     optchar = '?';
@@ -302,10 +321,10 @@ int getopt_long(int argc, const char** argv, const char* optstring,
     retval = '?';
     if (num_matches == 0) {
       if (opterr)
-        fprintf(stderr, "%s: unrecognized option -- '%s'\n", argv[0], argv[optind]);
+        fprintf(stderr, "%s: unrecognized option -- '%s'\n", optbinname(argv[0]), argv[optind]);
     } else {
       if (opterr)
-        fprintf(stderr, "%s: option '%s' is ambiguous\n", argv[0], argv[optind]);
+        fprintf(stderr, "%s: option '%s' is ambiguous\n", optbinname(argv[0]), argv[optind]);
     }
   }
 
